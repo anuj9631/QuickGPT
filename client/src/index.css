@@ -4,17 +4,17 @@
 @import "tailwindcss";
 
 
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 * {
-  font-family: "Manrope", sans-serif; 
+  font-family: "Outfit", sans-serif; 
 }
+
 @theme{
   --color-primary: #E6CCFF;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   display: none;
 }
 
