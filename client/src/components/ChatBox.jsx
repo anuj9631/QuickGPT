@@ -24,20 +24,46 @@ const ChatBox = () => {
           <div className="h-full flex flex-col items-center justify-center gap-2">
             <img
               src={theme === "dark" ? assets.logo_full : assets.logo_full_dark}
-              alt="" className="w-full max-w-56 sm:max-w-68"
+              alt=""
+              className="w-full max-w-56 sm:max-w-68"
             />
-            <p className="mt-5 text-4xl sm:text-6xl text-center text-gray-400">Ask me anything</p>
+            <p className="mt-5 text-4xl sm:text-6xl text-center text-gray-400">
+              Ask me anything
+            </p>
           </div>
         )}
-{messages.map((message, index) => (
-  <Message key={index} message={message} />
-))}
+        {messages.map((message, index) => (
+          <Message key={index} message={message} />
+        ))}
 
+        {/*Loading Animation */}
 
+        {loading && (
+          <div className="loader flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white animate-bounce">
+              {" "}
+            </div>
+
+            <div className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white animate-bounce">
+              {" "}
+            </div>
+
+            <div className="w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white animate-bounce">
+              {" "}
+            </div>
+          </div>
+        )}
       </div>
 
       {/*imput prompt box */}
-      <form></form>
+      <form >
+
+<select className="text-sm pl-3 pr-2 outline-none">
+  <option value="text" className="dark:bg-purple-900">Text</option>
+  <option value="text" className="dark:bg-purple-900">Image</option>
+</select>
+
+      </form>
     </div>
   );
 };
