@@ -3,9 +3,9 @@ import { useAppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import moment from "moment";
 
-
 const Sidebar = () => {
-  const { chats, setSelectedChats, theme, setTheme, user } = useAppContext();
+  const { chats, setSelectedChats, theme, setTheme, user, navigate } =
+    useAppContext();
   const [search, setSearch] = useState("");
 
   return (
@@ -23,7 +23,11 @@ const Sidebar = () => {
 
       {/* Search Bar */}
       <div className="flex items-center gap-2 p-3 mt-4 border border-gray-400 dark:border-white/20 rounded-md">
-        <img src={assets.search_icon} className="w-4 not-dark:invert" alt="Search" />
+        <img
+          src={assets.search_icon}
+          className="w-4 not-dark:invert"
+          alt="Search"
+        />
         <input
           onChange={(e) => setSearch(e.target.value)}
           value={search}
@@ -67,11 +71,56 @@ const Sidebar = () => {
             </div>
           ))}
       </div>
-      <div className="flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all">
-       <img src={assets.gallery_icon} className="w-4.5 not-dark:invert" alt="" />
-       <div className="flex flex-col text-sm">
-        <p>Community Images</p>
-       </div>
+
+      {/* Community*/}
+      <div
+        onClick={() => {
+          navigate("/Community");
+        }}
+        className="flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all"
+      >
+        <img
+          src={assets.gallery_icon}
+          className="w-4.5 not-dark:invert"
+          alt=""
+        />
+        <div className="flex flex-col text-sm">
+          <p>Community Images</p>
+        </div>
+      </div>
+
+      {/* Credit Purchase option*/}
+       {/* Credit Purchase option */}
+<div
+  onClick={() => {
+    navigate("/credits");
+  }}
+  className="flex items-center gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md cursor-pointer hover:scale-103 transition-all"
+>
+  <img src={assets.diamond_icon} className="w-4.5 dark:invert" alt="" />
+  <div className="flex flex-col text-sm">
+    <p>Credits : {user?.credits ?? 0}</p>
+    <p className="text-xs text-gray-400">
+      Purchase credits to use quickgpt
+    </p>
+  </div>
+</div>
+
+
+      {/* Dark mode*/}
+      <div className="flex items-center justify-between gap-2 p-3 mt-4 border border-gray-300 dark:border-white/15 rounded-md">
+        <div className="flex flex-center gap-2 text-sm">
+          <img src={assets.theme_icon} className="w-4 not-dark:invert" alt="" />
+          <p>Dark Mode</p>
+        </div>
+        <label className="relative inline-flex cursor-pointer">
+          <input onClick={()=> setTheme(theme === 'dark' ? 'light' : 'dark')} type="checkbox" className="sr-only peer" checked={theme === 'dark'}/>
+          <div className='w-9 h-5 bg-gray-400 rounded-full peer-checked:bg-purple-600 transition-all'>
+          </div>
+          <span className="absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-4">
+
+          </span>
+        </label>
       </div>
     </div>
   );
