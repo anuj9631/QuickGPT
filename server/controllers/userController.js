@@ -19,12 +19,12 @@ export const registerUser = async (req, res) => {
   try {
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.json({ succes: false, message: "User alreday exists" });
+      return res.json({ success: false, message: "User already exists" });
     }
 
     const user = await User.create({ name, email, password });
 
-    const token = generateToken(user-_id)
+    const token = generateToken(user._id)
     res.json({success: true, token})
   } catch (error) {
     return res.json({success: false, message: error.message})
@@ -39,7 +39,7 @@ export const loginUser = async (req, res) => {
    const { email, password } = req.body;
 
    try {
-     const userExists = await User.findOne({ email });
+     const user = await User.findOne({ email });
      if (user){
          const isMatch = await bcrypt.compare(password, user.password)
          if(isMatch){
