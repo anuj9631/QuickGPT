@@ -3,6 +3,7 @@
 import User from "../models/user.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcryptjs";
+import Chat from "../models/chat.js";
 
 // generate JWT
 
@@ -63,4 +64,33 @@ try {
 } catch (error) {
    return res.json({success: false, message: error.message})
 }
+}
+
+
+//api to get published image 
+
+
+export const getPublishedImages = async (req, res) => {
+  try {
+    const publishedImageMessages = await Chat.aggregate([
+      {$unwind : "$messages"},
+       {
+          $match: {
+            "messages.isImage" : true,
+            "messages.isPublished" : true
+          }
+       },
+       {
+           $project: {
+             _id: 0,
+             imageUrl : "$messages.content",
+             userName: "$userName"
+           }
+       }
+    ])
+
+    res.json({success : true, image: publishedImageMessages.reverse() })
+  } catch (error) {
+     return res.json({success: false, message: error.message})
+  }
 }
