@@ -1,7 +1,8 @@
 // Text based Ai chat meassge
-
+import axios from "axios"
 import Chat from "../models/chat.js";
 import User from "../models/user.js";
+import imagekit from "../configs/imageKit.js";
 
 export const textMessageController = async (req, res) => {
   try {
@@ -65,7 +66,37 @@ export const imageMessageController = async (req, res) => {
       isImage: false
     });
 
+    //Encode prompt
+
+    const encodedPrompt = encodeURIComponent(prompt)
+
+    //construct image kit ai url
+
+    const generatedImageUrl =  `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/quickgpt/${Date.now()}.png?tr=w-800,h-800`;
+
+    // Trigger by image kit
+   const aiImageResponse = await axios.get(generatedImageUrl, {responseType: "arraybuffer"})
+
+   //convert base64
+
+   const base64Image = `data:image/png;base64,${Buffer.from(aiImageResponse.data,"binary".toString('base64'))}`;
+
+   // upload to image kit 
+
+   const uploadResponse = await imagekit.upload({
+    file: base64Image,
+    fileName: `${Date.now()}.png`,
+    folder: "quickgpt"
+   })
     
+   
+    const reply = { role : 'assistant',
+      content : uploadResponse.url,
+      timestamp: Date.now(),
+      isImage: false,
+    };
+
+
   } catch (error) {
     
   }
