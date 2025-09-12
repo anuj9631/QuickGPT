@@ -4,6 +4,7 @@ import Loading from "../pages/Loading";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 
+
 const Community = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,16 +14,14 @@ const Community = () => {
     try {
       const { data } = await axios.get('/api/user/published-images');
       if (data.success) {
-        setImages(data.images || []); // <-- FIXED HERE
+        setImages(data.image);
       } else {
-        toast.error(data.message || "Failed to fetch images");
+        toast.error(data.message);
       }
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message || "Something went wrong";
-      toast.error(errorMsg);
-    } finally {
-      setLoading(false);
+      toast.error(error.message);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -38,30 +37,26 @@ const Community = () => {
       </h2>
       {images.length > 0 ? (
         <div className="flex flex-wrap max-sm:justify-center gap-5">
-          {images.map((item, index) => (
-            <a
-              key={index}
-              href={item.imageUrl || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => {
-                if (!item.imageUrl) {
-                  e.preventDefault();
-                  toast.error("Invalid image URL");
-                }
-              }}
-              className="relative group rounded-lg overflow-hidden border border-gray-200 dark:border-purple-700 shadow-sm hover:shadow-md transition-shadow duration-300"
-            >
-              <img
-                src={item.imageUrl}
-                alt=""
-                className="w-full h-40 md:h-50 2xl:h-62 object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
-              />
-              <p className="absolute bottom-0 right-0 text-xs bg-black/50 backdrop-blur text-white px-4 py-1 rounded-tl-xl opacity-0 group-hover:opacity-100 transition duration-300">
-                Created by {item.userName} 
-              </p>
-            </a>
-          ))}
+          {images.map((item, index) =>
+            item.imageUrl ? (
+              <a
+                key={index}
+                href={item.imageUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative group rounded-lg overflow-hidden border border-gray-200 dark:border-purple-700 shadow-sm hover:shadow-md transition-shadow duration-300"
+              >
+                <img
+                  src={item.imageUrl}
+                  alt=""
+                  className="w-full h-40 md:h-50 2xl:h-62 object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
+                />
+                <p className="absolute bottom-0 right-0 text-xs bg-black/50 backdrop-blur text-white px-4 py-1 rounded-tl-xl opacity-0 group-hover:opacity-100 transition duration-300">
+                  Created by {item.userName}
+                </p>
+              </a>
+            ) : null
+          )}
         </div>
       ) : (
         <p className="text-center text-gray-600 dark:text-purple-200 mt-10">
